@@ -1,6 +1,11 @@
 Change history
 ~~~~~~~~~~~~~~
 
+1.3 (Unreleased)
+----------------
+
+- Backport transactionality fixes from zope.sendmail
+
 1.2 (2010-02-11)
 ----------------
 
