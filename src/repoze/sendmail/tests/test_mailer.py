@@ -126,7 +126,24 @@ class TestSMTPMailer(unittest.TestCase):
             self.assert_(self.smtp.closed)
         finally:
             self.mailer.smtp.fail_on_quit = False
+    
+    def test_destroy_SMTP_connection_on_abort(self):
+        fromaddr = 'me@example.com'
+        toaddrs = ('you@example.com', 'him@example.com')
+        msgtext = 'Headers: headers\n\nbodybodybody\n-- \nsig\n'
+        self.mailer.vote(fromaddr, toaddrs, msgtext)
+        self.assertFalse(self.mailer.connection is None)
+        self.mailer.abort()
+        self.assertTrue(self.mailer.connection is None)
 
+    def test_destroy_SMTP_connection_on_commit(self):
+        fromaddr = 'me@example.com'
+        toaddrs = ('you@example.com', 'him@example.com')
+        msgtext = 'Headers: headers\n\nbodybodybody\n-- \nsig\n'
+        self.mailer.vote(fromaddr, toaddrs, msgtext)
+        self.assertFalse(self.mailer.connection is None)
+        self.mailer.send(fromaddr, toaddrs, msgtext)
+        self.assertTrue(self.mailer.connection is None)
 
 class TestSMTPMailerWithNoEHLO(TestSMTPMailer):
 

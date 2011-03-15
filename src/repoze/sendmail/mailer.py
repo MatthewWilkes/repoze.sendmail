@@ -65,6 +65,8 @@ class SMTPMailer(object):
         except socket.sslerror:
             #something weird happened while quiting
             self.connection.close()
+        finally:
+            self.connection = None
 
     def send(self, fromaddr, toaddrs, message):
         connection = getattr(self, 'connection', None)
@@ -96,3 +98,5 @@ class SMTPMailer(object):
         except socket.sslerror:
             #something weird happened while quiting
             connection.close()
+        finally:
+            self.connection = None
